@@ -1,9 +1,42 @@
 import React from 'react'
-import useStyles from '../../../styles'
-const Post = () => {
+import {Card, CardActions, CardContent, CardMedia, Button,Typography} from '@material-ui/core'
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import DeleteIcon from '@material-ui/icons/Delete';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import moment from 'moment'
+import useStyles from './styles'
+const Post = ({post}) => {
     const classes=useStyles();
   return (
-    <div>Post</div>
+    <Card className={classes.card}>
+      <CardMedia className={classes.media} image={post.selectedFile} title={post.title}/>
+      <div className={classes.overlay}>
+        <Typography varient="h6">{post.creator}</Typography>
+        <Typography varient="body2">{moment(post.createdAt).fromNow()}</Typography>
+      </div>
+      <div className={classes.overlay2}>
+        <Button style={{color:"White"}} size="small" onClick={()=>{}}>
+          <MoreHorizIcon fontSize='default'/>
+        </Button>
+      </div>
+      <div className={classes.details}>
+        <Typography varient="body2" color="textSecondary">{post.tags.map((tag)=>{return(`#${tag} `)})}</Typography>
+      </div>
+      <CardContent>
+        <Typography className={classes.title} varient="body2" gutterBottom>{post.message}</Typography>
+      </CardContent>
+      <CardActions className={classes.cardActions}>
+        <Button size="small" color="primary" onClick={()=>{}}>
+          <ThumbUpAltIcon size="small"/>
+          Like
+          {post.likeCount}
+        </Button>
+        <Button size="small" color="primary" onClick={()=>{}}>
+          <DeleteIcon size="small"/>
+          Delete
+        </Button>
+      </CardActions>
+    </Card>
   )
 }
 
