@@ -1,11 +1,11 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import useStyles from './styles'
 import FileBase from 'react-file-base64'
 import { TextField,Button,Paper,Typography } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { createPost } from '../../actions/posts';
+import { useDispatch,useSelector } from 'react-redux';
+import { createPost,updatePost } from '../../actions/posts'; 
 
-function Form() {
+function Form({currentId,setCurrentId}) {
     const [postData,setPostData]=useState({
       creator:"",
       title:"",
@@ -13,10 +13,18 @@ function Form() {
       tags:"",
       selectedFile:""
     })
+    console.log(currentId)
+    const post=useSelector((state)=>currentId?state.posts.find((p)=>p._id===currentId):null)
     const dispatch=useDispatch();
     const classes=useStyles();
+    useEffect(()=>{
+      if(post) setPostData(post);
+    },[post])
     const handleSubmit=(e)=>{
       e.preventDefault();
+      if(currentId){
+        dispatch(updatePost(currentId,postData));
+      }
       dispatch(createPost(postData));
     }
     const clear=()=>{}
@@ -32,7 +40,7 @@ function Form() {
             <FileBase 
               type="file"
               multiple={false}
-              onDone={(base64)=>setPostData({...postData,selectedFile:base64})}
+              onDone={({base64})=>setPostData({...postData,selectedFile:base64})}
             />
         </div>
         <Button className={classes.Button} varient="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
