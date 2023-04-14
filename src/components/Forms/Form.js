@@ -35,7 +35,7 @@ function Form({currentId,setCurrentId}) {
         <TextField name="creator" varient="outlined" label="Creator"  fullWidth value={postData.creator} onChange={(e)=>{setPostData({...postData,creator:e.target.value})}}/>
         <TextField name="title" varient="outlined" label="Title"  fullWidth value={postData.title} onChange={(e)=>{setPostData({...postData,title:e.target.value})}}/>
         <TextField name="message" varient="outlined" label="Message"  fullWidth value={postData.message} onChange={(e)=>{setPostData({...postData,message:e.target.value})}}/>
-        <TextField name="tags" varient="outlined" label="Tags"  fullWidth value={postData.tags} onChange={(e)=>{setPostData({...postData,tags:e.target.value})}}/>
+        <TextField name="tags" varient="outlined" label="Tags"  fullWidth value={postData.tags} onChange={(e)=>{setPostData({...postData,tags:e.target.value.split(",")})}}/>
         <div className={classes.fileInput}>
             <FileBase 
               type="file"
