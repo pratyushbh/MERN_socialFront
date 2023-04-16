@@ -1,13 +1,28 @@
 import axios from 'axios'
 
-const url="http://localhost:8000/posts";
+const API= axios.create({baseURL:'http://localhost:8000/'})
 
-export const fetchPost=()=>axios.get(url)
+API.interceptors.request.use((req)=>{
+    if(localStorage.getItem('profile')) {
+        req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
+    }
+    return req;
+})
 
-export const createPost=(newPost)=>axios.post(url,newPost);
+export const fetchPost=(page)=>API.get(`/posts?page=${page}`)
 
-export const updatePost=(id,updatedPost)=>axios.patch(`${url}/${id}`,updatedPost)
+export const fetchPostD=(id)=>API.get(`/posts/${id}`)
 
-export const deletePost=(id)=>axios.patch(`${url}/${id}`);
+export const createPost=(newPost)=>API.post('/posts',newPost);
 
-export const likePost=(id)=> axios.patch(`${url}/${id}/likepost`)
+export const updatePost=(id,updatedPost)=>API.patch(`/posts/${id}`,updatedPost)
+
+export const deletePost=(id)=>API.patch(`/posts/${id}`);
+
+export const likePost=(id)=> API.patch(`/posts/${id}/likepost`)
+
+export const signIn=(formData)=>API.post('/user/signin',formData)
+
+export const signUp=(formData)=>API.post('/user/signup',formData)
+
+export const fetchPostBySearch=(searchQuery)=>API.get(`/posts/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`)
